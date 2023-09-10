@@ -5,6 +5,15 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import FWA_AddressQualification from '../FWAAddressQualification';
+import CreditCheckRequest from '../CreditCheckRequest';
+import InitiateFWAOrder from '../InitiateFWAOrder';
+import SaveFWADevice from '../SavaFWADevice';
+import GetPlanRequest from '../GetPlanRequest';
+import SavePlanRequest from '../SavePlanRequest';
+import FWARefreshCreditCheck from '../FWARefreshCreditCheck';
+import ValidateFWAOrder from '../ValidateFWAOrder';
+import SubmitFWAOrder from '../SubmitFWAOrder';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -20,30 +29,30 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-    return ['PWA Address Qualification', 'Fixed Wireless Map', 'FWA Credit Check','Initiate FWA Order',
-    'Save FWA Order','Get Plan Request','Save Plan Request','Validate FWA Order','Submit FWA Order'];
+    return ['FWA Address Qualification', 'Fixed Wireless Map', 'Initiate FWA Order',
+    'Save FWA Order','Get Plan Request','Save Plan Request','FWA Refresh Credit Check','Validate FWA Order','Submit FWA Order'];
 }
 
 function getStepContent(stepIndex) {
     switch (stepIndex) {
         case 0:
-            return 'PWA Address Qualification';
+            return <FWA_AddressQualification/>;
         case 1:
-            return 'Fixed Wireless Map';
+            return <CreditCheckRequest />;
         case 2:
-            return 'FWA Credit Check';
+            return <InitiateFWAOrder />;
             case 3:
-            return 'Initiate FWA Order';
+            return <SaveFWADevice />;;
             case 4:
-            return 'Save FWA Order';
+            return <GetPlanRequest />;
             case 5:
-            return 'Get Plan Request';
+            return <SavePlanRequest/>;
             case 6:
-            return 'Save Plan Request';
+            return <FWARefreshCreditCheck/>;
             case 7:
-            return 'Validate FWA Order';
+            return <ValidateFWAOrder />;
             case 8:
-            return 'Submit FWA Order';
+            return <SubmitFWAOrder />;
         default:
             return 'Unknown stepIndex';
     }
@@ -109,14 +118,16 @@ export default function LayOut() {
                         </Step>
                     ))}
                 </Stepper>
-                <div style={{display:'flex',justifyContent:"center"}}>
+                
+            </div>
+            <div className='container'>
                     {activeStep === steps.length ? (
                         <div>
                             <Typography className={classes.instructions}>All steps completed</Typography>
                             <Button onClick={handleReset}>Reset</Button>
                         </div>
                     ) : (
-                        <div>
+                        <div className='py-3'>
                             <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
                             <div>
                                 <Button
@@ -133,7 +144,6 @@ export default function LayOut() {
                         </div>
                     )}
                 </div>
-            </div>
         </>
     );
 }
