@@ -15,6 +15,14 @@ import FWARefreshCreditCheck from '../startOrder/FWARefreshCreditCheck';
 import ValidateFWAOrder from '../startOrder/ValidateFWAOrder';
 import SubmitFWAOrder from '../startOrder/SubmitFWAOrder';
 
+import SubmitRemarks from '../postOrder/submitRemarks';
+import GenerateReceipts from '../postOrder/generateReceipts';
+import GenerateFWAConfirmation from '../postOrder/generateFWAConfirmation';
+import GetFWAAppointment from '../postOrder/getFWAAppoinment';
+import ValidateFWACustomer from '../postOrder/validateFWACustomer';
+import GenerateFWANexBillSummary from '../postOrder/generateFWANextBillSummary';
+import GenerateUrlRequest from '../postOrder/generateUrlRequest';
+
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -29,36 +37,33 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-    return ['FWA Address Qualification', 'Fixed Wireless Map', 'Initiate FWA Order',
-        'Save FWA Order', 'Get Plan Request', 'Save Plan Request', 'FWA Refresh Credit Check', 'Validate FWA Order', 'Submit FWA Order'];
+    return ['Submit Remarks', 'Generate Order Receipts', 'Generate FWA Confirmation',
+        'Get FWA Appointments', 'Validate FWA Customer Pin', 'Generate FWA Next Bill Summary', 'Generate Url Request'];
 }
 
 function getStepContent(stepIndex) {
     switch (stepIndex) {
         case 0:
-            return <FWA_AddressQualification />;
+            return <SubmitRemarks />;
         case 1:
-            return <CreditCheckRequest />;
+            return <GenerateReceipts />;
         case 2:
-            return <InitiateFWAOrder />;
+            return <GenerateFWAConfirmation />;
         case 3:
-            return <SaveFWADevice />;;
+            return <GetFWAAppointment />;;
         case 4:
-            return <GetPlanRequest />;
+            return <ValidateFWACustomer />;
         case 5:
-            return <SavePlanRequest />;
+            return <GenerateFWANexBillSummary />;
         case 6:
-            return <FWARefreshCreditCheck />;
-        case 7:
-            return <ValidateFWAOrder />;
-        case 8:
-            return <SubmitFWAOrder />;
+            return <GenerateUrlRequest />;
+
         default:
             return 'Unknown stepIndex';
     }
 }
 
-export default function LayOut() {
+export default function LayOutTwo() {
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
     const steps = getSteps();
@@ -78,7 +83,7 @@ export default function LayOut() {
     return (
         <>
             <div className='container py-3'>
-                <Typography variant='h5' style={{ color: "#2196f3" }}>Start Order</Typography>
+                <Typography variant='h5' style={{ color: "#2196f3" }}>Post Order</Typography>
                 <div class="card">
                     <div class="card-body">
                         <div className='row'>
@@ -109,46 +114,46 @@ export default function LayOut() {
                         </div>
                     </div>
                 </div>
-<br/>
-                <div class="card">
-                    <div class="card-body">
-                        <div className={classes.root}>
+           <br/>
+            <div class="card">
+                <div class="card-body">
+                    <div className={classes.root}>
 
-                            <Stepper activeStep={activeStep} alternativeLabel>
-                                {steps.map((label) => (
-                                    <Step key={label}>
-                                        <StepLabel>{label}</StepLabel>
-                                    </Step>
-                                ))}
-                            </Stepper>
+                        <Stepper activeStep={activeStep} alternativeLabel>
+                            {steps.map((label) => (
+                                <Step key={label}>
+                                    <StepLabel>{label}</StepLabel>
+                                </Step>
+                            ))}
+                        </Stepper>
 
-                        </div>
-                        <div className='container'>
-                            {activeStep === steps.length ? (
+                    </div>
+                    <div className='container'>
+                        {activeStep === steps.length ? (
+                            <div>
+                                <Typography className={classes.instructions}>All steps completed</Typography>
+                                <Button onClick={handleReset}>Reset</Button>
+                            </div>
+                        ) : (
+                            <div className='py-3'>
+                                <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
                                 <div>
-                                    <Typography className={classes.instructions}>All steps completed</Typography>
-                                    <Button onClick={handleReset}>Reset</Button>
+                                    <Button
+                                        disabled={activeStep === 0}
+                                        onClick={handleBack}
+                                        className={classes.backButton}
+                                    >
+                                        Back
+                                    </Button>
+                                    <Button variant="contained" color="primary" onClick={handleNext}>
+                                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                                    </Button>
                                 </div>
-                            ) : (
-                                <div className='py-3'>
-                                    <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
-                                    <div>
-                                        <Button
-                                            disabled={activeStep === 0}
-                                            onClick={handleBack}
-                                            className={classes.backButton}
-                                        >
-                                            Back
-                                        </Button>
-                                        <Button variant="contained" color="primary" onClick={handleNext}>
-                                            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                                        </Button>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </div>
                 </div>
+            </div>
             </div>
         </>
     );
